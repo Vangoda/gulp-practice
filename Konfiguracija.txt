@@ -1,0 +1,17 @@
+FTS image je samo php:apache-7.4 sa kopiranim publichtml u var/www/data
+Docker compose koristi zasebnu instancu mysql da ne kompliciranim sa mrezama i da ne
+moram sam pokretati mysql 5.6.
+
+var/www/html je izveden kao docker volume moodle_moodle-app-data.
+mysql baza je takoder volume naziva moodle_moodle-mysql-data.
+
+Custom apache dockerfile, dodan xdebug i git.
+
+nginx reverse proxy je takoder izmjenjen image, promjenjen config da
+bude dulji timeout i veci dopusteni upload.
+
+phpmyadmin promjenjen max upload
+
+Dodana mapa logs u parent folder, u nju idu logovi od apachea i xdebuga.
+
+Dodan Xdebug.ini i postavljen u docker-compose.

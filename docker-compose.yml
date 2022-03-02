@@ -1,0 +1,58 @@
+version: "3.9"
+
+services:
+  web-server:
+    image: vangoda/web-base:latest
+    volumes:
+      - webBase:/var/www/html
+      - ./shared:/var/www/html/shared
+      - ./xdebug.ini:/usr/local/etc/php/conf.d/xy-xdebug.ini
+    environment:
+      - VIRTUAL_HOST=webBase.local
+    networks:
+      - webBase
+      - nginx-proxy
+  
+  db:
+    image: mysql:5.6
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASS}
+    networks:
+      - webBase
+      - nginx-proxy
+
+  phpmyadmin:
+    image: phpmyadmin
+    ports:
+      - "8080:80"
+    networks:
+      - mysql
+      - webBase
+      - nginx-proxy
+    environment:
+      - PMA_ABSOLUTE_URI=pma.local
+      - VIRTUAL_HOST=pma.local
+      - UPLOAD_LIMIT=100M
+      - HIDE_PHP_VERSION=true
+
+# Im using external reverse proxy as I run many docker containers
+# nginx-proxy:
+#   image: vangoda/nginx-proxy:latest
+#   ports:
+#     - "80:80"
+#   volumes:
+#     - /var/run/docker.sock:/tmp/docker.sock
+#   networks:
+#     - webBase
+
+volumes:
+  webBase:
+  db:
+
+networks:
+  mysql:
+  webBase:
+  nginx-proxy:
+    external: true
