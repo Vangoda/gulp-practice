@@ -4,13 +4,13 @@ services:
   web-server:
     image: vangoda/web-base:latest
     volumes:
-      - webBase:/var/www/html
+      - gulp-practice:/var/www/html
       - ./shared:/var/www/html/shared
       - ./xdebug.ini:/usr/local/etc/php/conf.d/xy-xdebug.ini
     environment:
-      - VIRTUAL_HOST=webBase.local
+      - VIRTUAL_HOST=gulp-practice.local
     networks:
-      - webBase
+      - gulp-practice
       - nginx-proxy
   
   db:
@@ -20,7 +20,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASS}
     networks:
-      - webBase
+      - gulp-practice
       - nginx-proxy
 
   phpmyadmin:
@@ -29,7 +29,7 @@ services:
       - "8080:80"
     networks:
       - mysql
-      - webBase
+      - gulp-practice
       - nginx-proxy
     environment:
       - PMA_ABSOLUTE_URI=pma.local
@@ -45,14 +45,14 @@ services:
 #   volumes:
 #     - /var/run/docker.sock:/tmp/docker.sock
 #   networks:
-#     - webBase
+#     - gulp-practice
 
 volumes:
-  webBase:
+  gulp-practice:
   db:
 
 networks:
   mysql:
-  webBase:
+  gulp-practice:
   nginx-proxy:
     external: true
